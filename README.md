@@ -1,4 +1,4 @@
-vim-tools
+m-tools
 =========
 
-Programming and useful tools 
+Programming and useful tools for mumps development
