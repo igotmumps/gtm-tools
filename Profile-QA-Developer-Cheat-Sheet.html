@@ -1,0 +1,362 @@
+<p>Title: Profile QA/Developer Cheat Sheet <br>
+Author: Michael Zacharias <br>
+Date: July 8, 2014  </p>
+
+
+
+<h1 id="profile-qadeveloper-cheat-sheet">Profile QA/Developer Cheat Sheet</h1>
+
+<p><strong>Table of Contents</strong></p>
+
+<p><div class="toc">
+<ul>
+<li><a href="#profile-qadeveloper-cheat-sheet">Profile QA/Developer Cheat Sheet</a><ul>
+<li><a href="#unix-tips">Unix Tips</a><ul>
+<li><a href="#basic-commands">Basic Commands</a></li>
+<li><a href="#advanced-commands">Advanced Commands</a></li>
+<li><a href="#profile">.Profile</a></li>
+</ul>
+</li>
+<li><a href="#gtm">GTM</a><ul>
+<li><a href="#gtm-command-prompt">GTM Command Prompt</a></li>
+<li><a href="#basic-commands-1">Basic Commands</a><ul>
+<li><a href="#set-assigns-values-to-variables">Set - assigns values to variables</a></li>
+<li><a href="#write-output-the-value-of-a-variable">Write - Output the value of a variable</a></li>
+<li><a href="#do-execute-a-routine">Do - Execute a Routine</a></li>
+</ul>
+</li>
+<li><a href="#global-utilities">Global Utilities</a><ul>
+<li><a href="#g-global-listing">%G - Global Listing</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li><a href="#profile-1">Profile</a></li>
+<li><a href="#vivim-tips">vi/vim Tips</a></li>
+<li><a href="#smartterm">SmartTerm</a></li>
+<li><a href="#autohotkey">AutoHotKey</a></li>
+<li><a href="#reference-bookssites">Reference Books/Sites</a><ul>
+<li><a href="#books">Books</a></li>
+<li><a href="#sites">Sites</a></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+</div>
+</p>
+
+
+
+<h2 id="unix-tips">Unix Tips</h2>
+
+
+
+<h3 id="basic-commands">Basic Commands</h3>
+
+<p>ls - directory listing <br>
+cd - change directories <br>
+cat - dump a file <br>
+more - page through a file <br>
+man - manual (help) pages <br>
+cp - copy a file <br>
+mv - move/rename a file <br>
+rm - remove (delete) a file/directory</p>
+
+
+
+<h3 id="advanced-commands">Advanced Commands</h3>
+
+<p>grep - search a file <br>
+cut -  <br>
+sftp - secure file transfer</p>
+
+
+
+<h3 id="profile">.Profile</h3>
+
+<p>Allows you to customize your environment through the use of command aliases, environment variables, and functions.  Below is an example of my .profile file.</p>
+
+
+
+<pre class="prettyprint"><code class=" hljs coffeescript"><span class="hljs-comment"># Author:   Michael Zacharias</span>
+<span class="hljs-comment"># Date:     July 8, 2014</span>
+
+umask <span class="hljs-number">003</span>
+
+<span class="hljs-comment">######</span><span class="hljs-comment">######</span><span class="hljs-comment">######</span><span class="hljs-comment">#####
+# Environment Variables
+###</span><span class="hljs-comment">######</span><span class="hljs-comment">######</span><span class="hljs-comment">######</span><span class="hljs-comment">##</span>
+PATH=<span class="hljs-string">"$PWD/.bin:/usr/bin:/etc:/usr/sbin:/usr/ucb:$HOME/bin:/usr/bin/X11:/sbin:.:/utilities"</span>
+CDPATH=<span class="hljs-string">":$HOME/gtm:/app/prftst13"</span> <span class="hljs-comment"># a default list of directories that I use.</span>
+                  <span class="hljs-comment"># makes it easy to cd to them so I can type</span>
+                  <span class="hljs-comment"># cd r</span>
+                  <span class="hljs-comment"># and get to the /home/gtm/r directory from </span>
+                  <span class="hljs-comment"># anywhere.</span>
+<span class="hljs-reserved">export</span> PATH
+<span class="hljs-reserved">export</span> CDPATH       
+<span class="hljs-reserved">export</span> EDITOR=/usr/bin/vim  <span class="hljs-comment"># my default editor.  VIM of course!</span>
+<span class="hljs-reserved">export</span> MYVIMRC=<span class="hljs-string">"$HOME/.vimrc"</span>  <span class="hljs-comment"># makes it easy to refer to my .vimrc</span>
+<span class="hljs-reserved">export</span> VIM=<span class="hljs-string">"$HOME/.vim"</span>        <span class="hljs-comment"># makes it easy to refer to my .vim directory.</span>
+
+<span class="hljs-comment">######</span><span class="hljs-comment">######</span><span class="hljs-comment">######</span><span class="hljs-comment">#####
+# Aliases
+###</span><span class="hljs-comment">######</span><span class="hljs-comment">######</span><span class="hljs-comment">######</span><span class="hljs-comment">##</span>
+alias vi=vim
+
+<span class="hljs-comment">######</span><span class="hljs-comment">######</span><span class="hljs-comment">######</span><span class="hljs-comment">#####
+# Settings
+###</span><span class="hljs-comment">######</span><span class="hljs-comment">######</span><span class="hljs-comment">######</span><span class="hljs-comment">##</span>
+set -o vi
+
+<span class="hljs-comment">######</span><span class="hljs-comment">######</span><span class="hljs-comment">######</span><span class="hljs-comment">#####
+# Functions
+###</span><span class="hljs-comment">######</span><span class="hljs-comment">######</span><span class="hljs-comment">######</span><span class="hljs-comment">##</span>
+
+<span class="hljs-reserved">function</span> scpdev {                           <span class="hljs-comment"># lets me copy files from dev by typing</span>
+        scp axdedprf.ingdedev.<span class="hljs-attribute">com</span>:$<span class="hljs-number">1</span> $<span class="hljs-number">2</span>     <span class="hljs-comment"># scpdev /remote/path/to/filename /local/path/to/filename</span>
+        }
+<span class="hljs-reserved">function</span> scp2dev {                          <span class="hljs-comment"># lets me copy files to dev by typing</span>
+        scp $<span class="hljs-number">1</span> axdedprf.ingdedev.<span class="hljs-attribute">com</span>:$<span class="hljs-number">2</span>     <span class="hljs-comment"># scp2dev /local/path/to/filename /remote/path/to/filename</span>
+}
+<span class="hljs-reserved">function</span> scpqa {                            <span class="hljs-comment"># lets me copy files from qa by typing</span>
+        scp axmnqprf.ingqa.<span class="hljs-attribute">com</span>:$<span class="hljs-number">1</span> $<span class="hljs-number">2</span>        <span class="hljs-comment"># scpqa /remote/path/to/filename /local/path/to/filename</span>
+}
+<span class="hljs-reserved">function</span> scp2qa {                           <span class="hljs-comment"># lets me copy files to qa by typing        </span>
+        scp $<span class="hljs-number">1</span> axmnqprf.ingqa.<span class="hljs-attribute">com</span>:$<span class="hljs-number">2</span>        <span class="hljs-comment"># scp2qa /local/path/to/filename /remote/path/to/filename</span>
+}
+<span class="hljs-reserved">function</span> scpbvt {                           <span class="hljs-comment"># lets me copy files from bvt by typing</span>
+        scp bdvdelxbvt01.ingdedev.<span class="hljs-attribute">com</span>:$<span class="hljs-number">1</span> $<span class="hljs-number">2</span> <span class="hljs-comment"># scpbvt /remote/path/to/filename /local/path/filename</span>
+}
+<span class="hljs-reserved">function</span> scp2bvt {                          <span class="hljs-comment"># lets me copy files to bvt by typing </span>
+        scp $<span class="hljs-number">1</span> bdvdelxbvt01.ingdedev.<span class="hljs-attribute">com</span>:$<span class="hljs-number">2</span> <span class="hljs-comment"># scp2bvt /local/path/to/filename /remote/local/path/filename</span>
+}
+<span class="hljs-reserved">function</span> scp2bkup {                         <span class="hljs-comment"># lets me copy files from bvt by typing</span>
+        scp $<span class="hljs-number">1</span> axdepyst.ingdirect.<span class="hljs-attribute">com</span>:$<span class="hljs-number">2</span>    <span class="hljs-comment"># scpbkup /path/to/file/filename /local/path/filename</span>
+        }
+
+<span class="hljs-keyword">if</span> [ -s <span class="hljs-string">"$MAIL"</span> ]           <span class="hljs-comment"># This is at Shell startup.  In normal</span>
+<span class="hljs-keyword">then</span> echo <span class="hljs-string">"$MAILMSG"</span>        <span class="hljs-comment"># operation, the Shell checks</span>
+fi                          <span class="hljs-comment"># periodically.</span>
+</code></pre>
+
+
+
+<h2 id="gtm">GTM</h2>
+
+
+
+<h3 id="gtm-command-prompt">GTM Command Prompt</h3>
+
+<p>In most Profile environments, access to the GTM prompt is done by executing the dm shell script.  To do this, change to the Profile directory and enter the following command:</p>
+
+
+
+<pre class="prettyprint"><code class=" hljs ruby">axdedprf<span class="hljs-variable">$ </span>prftst13
+axdedprf<span class="hljs-variable">$ </span>./dm
+
+<span class="hljs-constant">GTM</span>&gt;</code></pre>
+
+<p>Now we’re ready to rock and roll!</p>
+
+
+
+<h3 id="basic-commands-1">Basic Commands</h3>
+
+<p>Most commands in GTM can be abbreviated to the first character of the command.  For example, SET can be abbreviated to S.  I’m lazy, so I’ll be using the abbreviated version in my examples.</p>
+
+<p>Also, GTM (and all MUMPS for that matter) is case sensitive.  So CAR is different than car, etc.  This does not apply to commands though.  So you can use SET, set, Set, sET, whatever.</p>
+
+
+
+<h4 id="set-assigns-values-to-variables">Set - assigns values to variables</h4>
+
+<p>Set is used to assign values to variables, arrays and globals:</p>
+
+
+
+<pre class="prettyprint"><code class=" hljs erlang-repl"><span class="hljs-variable">GTM</span>&gt;<span class="hljs-variable">S</span> <span class="hljs-variable">STR</span>=<span class="hljs-string">"Hello, World!"</span>
+
+<span class="hljs-variable">GTM</span>&gt;<span class="hljs-variable">W</span> <span class="hljs-variable">STR</span>
+<span class="hljs-variable">Hello</span>, <span class="hljs-variable">World</span><span class="hljs-exclamation_mark">!</span>
+<span class="hljs-variable">GTM</span>&gt;</code></pre>
+
+<p>And to insert nodes into a global:</p>
+
+
+
+<pre class="prettyprint"><code class=" hljs bash">GTM&gt;S ^CAR(<span class="hljs-string">"model"</span>,<span class="hljs-string">"sport"</span>)=<span class="hljs-number">2</span>
+
+GTM&gt;S ^CAR(<span class="hljs-string">"model"</span>,<span class="hljs-string">"sport"</span>,<span class="hljs-string">"color"</span>,<span class="hljs-string">"red"</span>)=<span class="hljs-number">1</span>
+
+GTM&gt;S ^CAR(<span class="hljs-string">"model"</span>,<span class="hljs-string">"sport"</span>,<span class="hljs-string">"color"</span>,<span class="hljs-string">"green"</span>)=<span class="hljs-number">1</span>
+
+GTM&gt;S ^CAR(<span class="hljs-string">"model"</span>,<span class="hljs-string">"sedan"</span>)=<span class="hljs-number">1</span>
+
+GTM&gt;S ^CAR(<span class="hljs-string">"model"</span>,<span class="hljs-string">"sedan"</span>,<span class="hljs-string">"color"</span>,<span class="hljs-string">"brown"</span>)=<span class="hljs-number">1</span>
+
+GTM&gt;</code></pre>
+
+
+
+<h4 id="write-output-the-value-of-a-variable">Write - Output the value of a variable</h4>
+
+<p>The write command outputs the value of a variable to the current output device.  In most cases, this is the terminal screen but it can be a file or some other device.</p>
+
+
+
+<pre class="prettyprint"><code class=" hljs erlang-repl"><span class="hljs-variable">GTM</span>&gt;<span class="hljs-variable">S</span> <span class="hljs-variable">STR</span>=<span class="hljs-string">"Hello, World!"</span>
+
+<span class="hljs-variable">GTM</span>&gt;<span class="hljs-variable">W</span> <span class="hljs-variable">STR</span>
+<span class="hljs-variable">Hello</span>, <span class="hljs-variable">World</span><span class="hljs-exclamation_mark">!</span>
+<span class="hljs-variable">GTM</span>&gt;</code></pre>
+
+
+
+<h4 id="do-execute-a-routine">Do - Execute a Routine</h4>
+
+<p>Here’s a little “Hello, World” routine that will print “Hello, NAME” where NAME is specified as a parameter to the routine.</p>
+
+
+
+<pre class="prettyprint"><code class=" hljs bash">GTM&gt;ZP ^ZHLOWRLD
+ZHLOWRLD(NAME)
+        W <span class="hljs-string">"Hello, "</span>_NAME
+        Q</code></pre>
+
+<p>If we want to say hello to Dexter, we just do the following:</p>
+
+
+
+<pre class="prettyprint"><code class=" hljs mathematica">GTM&gt;<span class="hljs-keyword">D</span> ^ZHLOWRLD(<span class="hljs-string">"Dexter"</span>)
+Hello, Dexter
+GTM&gt;</code></pre>
+
+
+
+<h3 id="global-utilities">Global Utilities</h3>
+
+
+
+<h4 id="g-global-listing">%G - Global Listing</h4>
+
+<p>Displays global variables and their values. Use %G to examine global variables and their values.  </p>
+
+
+
+<pre class="prettyprint"><code class=" hljs php">GTM&gt;D ^%G
+
+<span class="hljs-keyword">Global</span> output
+
+Device: /dev/pts/<span class="hljs-number">3</span>
+<span class="hljs-keyword">Global</span> ^CAR
+^CAR(<span class="hljs-string">"model"</span>,<span class="hljs-string">"hatchback"</span>)=<span class="hljs-number">10</span>
+^CAR(<span class="hljs-string">"model"</span>,<span class="hljs-string">"hatchback"</span>,<span class="hljs-string">"color"</span>,<span class="hljs-string">"blue"</span>)=<span class="hljs-number">3</span>
+                                  <span class="hljs-string">"red"</span>)=<span class="hljs-number">7</span>
+^CAR(<span class="hljs-string">"model"</span>,<span class="hljs-string">"hatchback"</span>,<span class="hljs-string">"num_doors"</span>)=<span class="hljs-number">3</span>
+^CAR(<span class="hljs-string">"model"</span>,<span class="hljs-string">"sedan"</span>)=<span class="hljs-number">1</span>
+^CAR(<span class="hljs-string">"model"</span>,<span class="hljs-string">"sedan"</span>,<span class="hljs-string">"color"</span>)=brown
+                 <span class="hljs-string">"num_doors"</span>)=<span class="hljs-number">4</span>
+^CAR(<span class="hljs-string">"model"</span>,<span class="hljs-string">"sport"</span>)=<span class="hljs-number">2</span>
+^CAR(<span class="hljs-string">"model"</span>,<span class="hljs-string">"sport"</span>,<span class="hljs-string">"color"</span>,<span class="hljs-string">"green"</span>)=<span class="hljs-number">1</span>
+                               <span class="hljs-string">"red"</span>)=<span class="hljs-number">1</span>
+^CAR(<span class="hljs-string">"model"</span>,<span class="hljs-string">"sport"</span>,<span class="hljs-string">"num_doors"</span>)=<span class="hljs-number">2</span>
+^CAR(<span class="hljs-string">"model"</span>,<span class="hljs-string">"wagon"</span>)=<span class="hljs-number">8</span>
+^CAR(<span class="hljs-string">"model"</span>,<span class="hljs-string">"wagon"</span>,<span class="hljs-string">"color"</span>,<span class="hljs-string">"blue"</span>)=<span class="hljs-number">3</span>
+                              <span class="hljs-string">"red"</span>)=<span class="hljs-number">5</span>
+^CAR(<span class="hljs-string">"model"</span>,<span class="hljs-string">"wagon"</span>,<span class="hljs-string">"num_doors"</span>)=<span class="hljs-number">5</span>
+<span class="hljs-keyword">Global</span> ^
+GTM&gt;</code></pre>
+
+<p>You can list a global from any sub-level as well.  If you want to list all of the sports cars:</p>
+
+
+
+<pre class="prettyprint"><code class=" hljs php">GTM&gt;
+
+GTM&gt;D ^%G
+
+<span class="hljs-keyword">Global</span> output
+
+Device: /dev/pts/<span class="hljs-number">3</span>
+<span class="hljs-keyword">Global</span> ^CAR(<span class="hljs-string">"model"</span>,<span class="hljs-string">"sport"</span>
+^CAR(<span class="hljs-string">"model"</span>,<span class="hljs-string">"sport"</span>)=<span class="hljs-number">2</span>
+^CAR(<span class="hljs-string">"model"</span>,<span class="hljs-string">"sport"</span>,<span class="hljs-string">"color"</span>,<span class="hljs-string">"green"</span>)=<span class="hljs-number">1</span>
+                               <span class="hljs-string">"red"</span>)=<span class="hljs-number">1</span>
+^CAR(<span class="hljs-string">"model"</span>,<span class="hljs-string">"sport"</span>,<span class="hljs-string">"num_doors"</span>)=<span class="hljs-number">2</span>
+<span class="hljs-keyword">Global</span> ^
+GTM&gt;</code></pre>
+
+<p>Enter a range of subscripts to list:</p>
+
+
+
+<pre class="prettyprint"><code class=" hljs php">GTM&gt;
+
+GTM&gt;D ^%G
+
+<span class="hljs-keyword">Global</span> output
+
+Device: /dev/pts/<span class="hljs-number">3</span>
+<span class="hljs-keyword">Global</span> ^CAR(<span class="hljs-string">"model"</span>,<span class="hljs-string">"hatchback"</span>:<span class="hljs-string">"sedan"</span>
+^CAR(<span class="hljs-string">"model"</span>,<span class="hljs-string">"hatchback"</span>)=<span class="hljs-number">10</span>
+^CAR(<span class="hljs-string">"model"</span>,<span class="hljs-string">"hatchback"</span>,<span class="hljs-string">"color"</span>,<span class="hljs-string">"blue"</span>)=<span class="hljs-number">3</span>
+                                  <span class="hljs-string">"red"</span>)=<span class="hljs-number">7</span>
+^CAR(<span class="hljs-string">"model"</span>,<span class="hljs-string">"hatchback"</span>,<span class="hljs-string">"num_doors"</span>)=<span class="hljs-number">3</span>
+^CAR(<span class="hljs-string">"model"</span>,<span class="hljs-string">"sedan"</span>)=<span class="hljs-number">1</span>
+^CAR(<span class="hljs-string">"model"</span>,<span class="hljs-string">"sedan"</span>,<span class="hljs-string">"color"</span>)=brown
+                 <span class="hljs-string">"num_doors"</span>)=<span class="hljs-number">4</span>
+<span class="hljs-keyword">Global</span> ^
+GTM&gt;</code></pre>
+
+
+
+<h2 id="profile-1">Profile</h2>
+
+
+
+<h2 id="vivim-tips">vi/vim Tips</h2>
+
+<p>Paste from the Windows clipboard</p>
+
+
+
+<pre class="prettyprint"><code class=" hljs 1c"><span class="hljs-string">"*p  # this works when working in vim on your local pc</span></code></pre>
+
+<p>Copy to the Windows clipboard</p>
+
+
+
+<pre class="prettyprint"><code class=" hljs 1c"><span class="hljs-string">"*y  # this works when working in vim on your local pc</span></code></pre>
+
+
+
+<h2 id="smartterm">SmartTerm</h2>
+
+
+
+<h2 id="autohotkey">AutoHotKey</h2>
+
+
+
+<h2 id="reference-bookssites">Reference Books/Sites</h2>
+
+
+
+<h3 id="books">Books</h3>
+
+<p><a href="http://www.amazon.com/gp/product/0596001959/ref=as_li_tl?ie=UTF8&amp;camp=1789&amp;creative=390957&amp;creativeASIN=0596001959&amp;linkCode=as2&amp;tag=mygamingsto02-20&amp;linkId=KAA5GRGQUQCD7OKK">Learning the Korn Shell - 2nd Edition</a></p>
+
+<p><a href="http://www.amazon.com/The-Complete-MUMPS-Introduction-Programming/dp/0131621254/ref=sr_1_1?ie=UTF8&amp;qid=1404941619&amp;sr=8-1&amp;keywords=the+complete+mumps">The Complete MUMPS</a></p>
+
+
+
+<h3 id="sites">Sites</h3>
+
+<p><a href="http://files.swarooph.com/vim/bytes_of_vim_v051.pdf">A Byte of Vim</a></p>
+
+<p><a href="http://tinco.pair.com/bhaskar/gtm/doc/books/pg/UNIX_manual/index.html">GTM Programmers Guide</a></p>
+
+<blockquote>
+  <p>Written with <a href="https://stackedit.io/">StackEdit</a>.</p>
+</blockquote>
